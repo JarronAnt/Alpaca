@@ -1,0 +1,33 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  alpaca:
+    build: .
+    volumes:
+      - ./workspace:/workspace
+      - ~/.alpaca:/home/alpaca/.config/alpaca
+    environment:
+      - OLLAMA_URL=http://ollama:11434/api/chat
+      - WORKSPACE_ROOT=/workspace
+      - LOG_LEVEL=INFO
+    depends_on:
+      - ollama
+    networks:
+      - alpaca-network
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - alpaca-network
+
+volumes:
+  ollama-data:
+
+networks:
+  alpaca-network:
+    driver: bridge
