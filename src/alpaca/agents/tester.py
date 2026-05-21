@@ -40,6 +40,15 @@ Run tests and report results clearly."""
         for c in candidates:
             if (project_path / c).exists():
                 return c
+        # Fallback: find any .py file (except test files)
+        py_files = [f for f in project_path.glob("*.py") 
+            if not f.name.startswith("test_")]
+        if len(py_files) == 1:
+            return py_files[0].name
+        elif len(py_files) > 1:
+        # Pick the largest file (likely the main one)
+            return max(py_files, key=lambda f: f.stat().st_size).name
+    
         return None
     
     def run(self) -> TaskResult:
@@ -66,7 +75,7 @@ Run tests and report results clearly."""
                 return TaskResult(success=False, error="No entrypoint found")
             
             result = run_tool("run_shell", {
-                "command": f"python {entry}",
+                "command": f"python3 {entry}",
                 "cwd": str(project),
             })
         

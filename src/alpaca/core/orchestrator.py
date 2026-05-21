@@ -78,17 +78,20 @@ class AgentOrchestrator:
                 return build_result
             
             # Step 4: Test
-            self._update_dashboard()
-            test_result = self.tester.run()
-            
-            if not test_result.success:
-                console.print("[yellow]Tests failed, attempting fix...[/yellow]")
+           # In orchestrator.py, replace the test section with:
+
+            max_test_retries = 3
+            for attempt in range(max_test_retries):
+                test_result = self.tester.run()
+                if test_result.success:
+                    break
+                console.print(f"[yellow]Tests failed (attempt {attempt+1}/{max_test_retries}), fixing...[/yellow]")
                 fix_result = self.builder.fix(test_result.error or "Tests failed")
                 if not fix_result.success:
                     return fix_result
-                # Re-test
-                test_result = self.tester.run()
-            
+            else:
+                console.print("[red]Tests failed after max retries[/red]")
+                return TaskResult(success=False, error="Tests failed after 3 attempts")            
             # Step 5: Review
             self._update_dashboard()
             review_result = self.reviewer.run(user_input, build_result.output)
