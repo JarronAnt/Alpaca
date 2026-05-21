@@ -43,9 +43,11 @@ uv pip install -e .
 
 # Or with pip
 pip install -e .
+```
 
 ### Usage
 
+```
 # Activate venv
 source .venv/bin/activate
 
