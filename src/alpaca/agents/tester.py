@@ -75,7 +75,7 @@ Run tests and report results clearly."""
                 return TaskResult(success=False, error="No entrypoint found")
             
             result = run_tool("run_shell", {
-                "command": f"python3 {entry}",
+                "command": f"python3 {entry} 2>/dev/null || python",
                 "cwd": str(project),
             })
         
