@@ -24,13 +24,14 @@ RULES:
 - ALWAYS create directory before writing files
 - You may output multiple tools per response
 - Do not explain actions
+- NEVER use run_shell to test or run code - only write files
 
 Available tools:
 - create_directory: {"path": "dir_name"}
 - write_file: {"path": "file_name", "content": "file contents"}
 - read_file: {"path": "file_name"}
 - list_files: {"path": "."}
-- run_shell: {"command": "shell command"}
+
 
 Tool format:
 <tool name="write_file">

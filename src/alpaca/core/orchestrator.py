@@ -84,6 +84,8 @@ class AgentOrchestrator:
             for attempt in range(max_test_retries):
                 test_result = self.tester.run()
                 if test_result.success:
+                    console.print("[green]✓ Fix successful! Tests passing.[/green]")
+                    
                     break
                 console.print(f"[yellow]Tests failed (attempt {attempt+1}/{max_test_retries}), fixing...[/yellow]")
                 fix_result = self.builder.fix(test_result.error or "Tests failed")
@@ -95,7 +97,8 @@ class AgentOrchestrator:
             # Step 5: Review
             self._update_dashboard()
             review_result = self.reviewer.run(user_input, build_result.output)
-            
+
+            print(f"DEBUG: Reviewer returned: {review_result}") 
             self._update_dashboard()
             
             # Final summary
